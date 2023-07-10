@@ -1,7 +1,8 @@
 import os
+import uuid
 from pathlib import Path
 import subprocess as sp
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 from flask import Flask, request, send_from_directory
 
 
@@ -28,12 +29,15 @@ def convert_to(filetype):
         }
 
     file = request.files['file']
-    filename = f'./uploads/{secure_filename(file.filename)}'
+    from_filetype = os.path.splitext(file.filename)[1]
+    # filename = f'./uploads/{secure_filename(file.filename)}'
+    filename = f'./uploads/{uuid.uuid4()}{from_filetype}'
     file.save(filename)
     output_file = os.path.splitext(filename)[0] + '.' + filetype
 
     media_dir = os.path.splitext(filename)[0]
-    (Path(media_dir) / 'media').mkdir(parents=True, exist_ok=True)
+    print(media_dir + '/media/')
+    os.makedirs(media_dir + '/media/', exist_ok=True)
     sp.run(["pandoc", filename, "-o", output_file, f"--extract-media={media_dir}"], check=True)
     output_file = output_file[1:]
     media_list = [f"{media_dir}/media/{i.name}"[1:] for i in Path(media_dir + '/media/').iterdir()]
