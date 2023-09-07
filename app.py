@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return 'Hello You'
+    return 'Welcome to chanmo/pandoc'
 
 @app.route('/uploads/<path:name>')
 def download_file(name):
@@ -36,9 +36,12 @@ def convert_to(filetype):
     output_file = os.path.splitext(filename)[0] + '.' + filetype
 
     media_dir = os.path.splitext(filename)[0]
-    print(media_dir + '/media/')
     os.makedirs(media_dir + '/media/', exist_ok=True)
-    sp.run(["pandoc", filename, "-o", output_file, f"--extract-media={media_dir}"], check=True)
+    if filetype == 'html':
+        sp.run(["pandoc", filename, "-o", output_file, f"--extract-media={media_dir}"], check=False)
+    else:
+        sp.run(["pandoc", filename, "-o", output_file], check=False)
+
     output_file = output_file[1:]
     media_list = [f"{media_dir}/media/{i.name}"[1:] for i in Path(media_dir + '/media/').iterdir()]
     return {
