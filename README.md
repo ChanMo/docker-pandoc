@@ -2,6 +2,8 @@
 
 Notice: There is no support for converting to PDF format.
 
+For more tools to help you manage and use your documents, visit [Awesome Document](https://www.chanmo.me/awesome_document.html)
+
 ## Usage
 
 Start the API server
