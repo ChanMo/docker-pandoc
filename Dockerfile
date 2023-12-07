@@ -11,4 +11,4 @@ COPY app.py .
 EXPOSE 5000
 RUN mkdir /app/uploads/
 
-CMD ["gunicorn", "-w", "4", "-b", ":5000", "app:app"]
+CMD ["gunicorn", "-w", "4", "-b", ":5000", "-t", "300", "app:app"]

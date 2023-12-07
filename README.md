@@ -27,6 +27,11 @@ Result:
 
 Then, you can download the HTML file from the output value.
 
+If you want the API to return the binary data directly, you can add the `download=true`:
+```
+http -f POST :5000/convert/html?download=true file@~/demo.docx -o demo.html
+```
+
 ## APIs
 
 ```

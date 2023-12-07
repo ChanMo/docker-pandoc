@@ -3,7 +3,7 @@ import uuid
 from pathlib import Path
 import subprocess as sp
 # from werkzeug.utils import secure_filename
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, send_file
 
 
 app = Flask(__name__)
@@ -41,6 +41,9 @@ def convert_to(filetype):
         sp.run(["pandoc", filename, "-o", output_file, f"--extract-media={media_dir}"], check=False)
     else:
         sp.run(["pandoc", filename, "-o", output_file], check=False)
+
+    if request.args.get('download'):
+        return send_file(output_file)
 
     output_file = output_file[1:]
     media_list = [f"{media_dir}/media/{i.name}"[1:] for i in Path(media_dir + '/media/').iterdir()]
